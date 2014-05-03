@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Arachna</title>
+
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/darkstrap.min.css">
+    <link rel="stylesheet" href="/static/custom.css">
+  </head>
+
+  <body class="arachna">
+    {% include "nav.html" %}
+ 
+   <div class="container">
+
+      {% if rank < 0 %}
+      <div style="text-align:center;margin-top:20px;"><code style="font-size:14px;">No results found</code></div>
+      {% endif %}
+
+      <div class="well">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Number of problems</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              {% if rank == user.rank %}
+            <tr class="info">
+              {% elif user.rank == rank-5 %}
+            <tr id="user">
+              {% else %}
+            <tr>
+              {% endif %}
+              <td>{{ user.rank }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.problems }}</td>
+              <td>{{ user.score }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -12,72 +12,17 @@
   </head>
 
   <body class="arachna">
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="/index">Arachna</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li><a href="/score">By Score</a></li>
-              <li><a href="/problems">By Problems</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    
+   {% include "nav.html" %}
+ 
    <div class="container">
       <div class="well">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Number of problems</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for user in users %}
-            <tr>
-              <td>{{ user.rank }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.problems }}</td>
-              <td>{{ user.score }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="pagination pagination-centered">
-        <ul>
-          {% if page == 1 %}
-          <li class="disabled"><a>&laquo;</a></li>
-          {% else %}
-          <li><a href="/score/{{ page-1 }}">&laquo;</a></li>
-          {% endif %}
-
-          {% for idx in range(amount) %}
-            {% if idx+1 == page %}
-          <li class="active"><a>{{ idx+1 }}</a></li>
-            {% else %}
-          <li><a href="/score/{{ idx+1 }}">{{ idx+1 }}</a></li>
-            {% endif %}
-          {% endfor %}
-          
-          {% if page == amount %}
-          <li class="disabled"><a>&raquo;</a></li>
-          {% else %}
-          <li><a href="/score/{{ page+1 }}">&raquo;</a></li>
-          {% endif %}
-        </ul>
+        <h1 class="fronttitle">Arachna</h1>
       </div> 
-    </div>
+      <blockquote>
+        <p>A crawler of <a href="br.spoj.com">br.spoj.com</a> that produces the ranking of all users, ordered by score or number of problems. 
+           It was developed during the 3rd annual brazilian Facebook hackathon in 24 hours.</p>
+      </blockquote>
+   </div>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

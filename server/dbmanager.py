@@ -59,6 +59,9 @@ def get_amount():
     result = int(db.fetchone()[0])
     return int(ceil(result/1000.0))
 
+def get_all():
+    return list(execute("SELECT * FROM users ORDER BY score DESC"))
+
 def get_all_by(type, page):
     result = list(execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
     return result
