@@ -1,12 +1,25 @@
-.well {
+.arachna .well {
   margin-top: 20px;
 }
 
-.table {
+.arachna .table {
   margin-bottom: 0px;
 }
 
-body {
+body.arachna {
   padding-top: 50px;
+}
+
+.arachna .table>tbody>tr>td {
+  border-top: 1px solid #363636;
+}
+
+.arachna .table-striped tbody>tr:nth-child(odd)>td {
+  background-color: #292929;
+}
+
+.arachna .table>tbody>tr:nth-child(odd) {
+  border-left: 1px solid #363636;
+  border-right: 1px solid #363636;
 }
 

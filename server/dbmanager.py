@@ -1,4 +1,5 @@
 import sqlite3
+from math import ceil
 
 def create(users_dict):
     conn = sqlite3.connect("/Arachna/database/users.db")
@@ -24,20 +25,28 @@ def get_user(user):
 
     return result
     
-def get_all_by_problems():
+def get_amount():
     conn = sqlite3.connect("/Arachna/database/users.db")
     c = conn.cursor()
     
-    result = list(c.execute("SELECT * FROM users ORDER BY problems DESC"))
+    c.execute("SELECT COUNT(*) FROM users")
+    result = int(c.fetchone()[0])
+    conn.close()
+
+    return int(ceil(result/1000.0))
+
+def get_all_by(type, page):
+    conn = sqlite3.connect("/Arachna/database/users.db")
+    c = conn.cursor()
+    
+    result = list(c.execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
     conn.close()
 
     return result
 
-def get_all_by_score():
-    conn = sqlite3.connect("/Arachna/database/users.db")
-    c = conn.cursor()
-    
-    result = list(c.execute("SELECT * FROM users ORDER BY score DESC"))
-    conn.close()
+def get_all_by_problems(page):
+    return get_all_by("problems", page)
 
-    return result
+def get_all_by_score(page):
+    return get_all_by("score", page)
+
