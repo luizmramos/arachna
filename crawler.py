@@ -53,15 +53,17 @@ def hasFinished(line):
 user_points = {}
 
 def crawl_problem(problem, lock):
-	with lock:
-		users, points = process_problem(problem)
+	users, points = process_problem(problem)		
+	with lock:	
 		for user in users:
 			if not user in user_points:
-				user_points[user] = 0
-			user_points[user] += points
+				user_points[user] = (0, 0)
+			old = user_points[user];
+			user_points[user] = (old[0] + 1, old[1] + points)
+
 
 def crawl_all_problems():
-	pool = ThreadPool(10)
+	pool = ThreadPool(16)
 	problem_sets = ["contest_noturno", "mineira", "obi", "regionais", "seletivas", "seletiva_ioi", 	"sulamericana"]	
 	lock = thread.allocate_lock()
 	for problem_set in problem_sets:
@@ -73,10 +75,11 @@ def crawl_all_problems():
 			for problem in problems:
 				pool.add_task(crawl_problem, problem, lock)
 			offset = offset + len(problems)
-			pool.wait_completion()
-			print user_points
 			if hasFinished(html):
 				break
+		pool.wait_completion()
+		print "------------------------------------------------------> " + problem_set + " done!"
+
 
 if __name__ == "__main__":
 	crawl_all_problems()

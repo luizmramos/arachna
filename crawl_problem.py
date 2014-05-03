@@ -3,12 +3,13 @@ import re;
 
 USER_PER_PROBLEM_PAGE = 20
 PROBLEM_PAGE_PREFIX = "http://br.spoj.com/ranks/"
+DISABLED_NEXT = "<i>Pr&#243;ximo</i>"
+ENABLED_NEXT = r'<a href="/ranks/\w+(/start=\d+)?" class="pager_link">Pr&#243;ximo</a>'
 
 user_points = {}
 
 
 def process_problem(problem_name):
-	print problem_name + ":", 
 	response = urllib2.urlopen(PROBLEM_PAGE_PREFIX + problem_name).read();
 	accepteds_regexp = re.compile(r'<tr class="lightrow">\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>(\d+)</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+</tr>')
  	accepteds = 0;
@@ -22,15 +23,15 @@ def process_problem(problem_name):
 	while True:
 		url = PROBLEM_PAGE_PREFIX + problem_name + "/start=" + str(start)
 		content = urllib2.urlopen(url).read()
-		if len(re.findall("<i>Pr&#243;ximo</i>", content)) >= 1:
-			break
 		nusers = process_problem_users(content, users)
-		if nusers == 0:
+		print str(page) + " (" + problem_name + ")"
+		if nusers == 0 or \
+		   len(re.findall(DISABLED_NEXT, content)) >= 1 or \
+		   (len(re.findall(DISABLED_NEXT, content)) == 0) and (len(re.findall(ENABLED_NEXT, content)) == 0):
 			break
-		print page,
 		page += 1
 		start += USER_PER_PROBLEM_PAGE
-	print "/" + problem_name
+	print "------------------> " + problem_name + " done!"
 	return (users, points)
 
 
