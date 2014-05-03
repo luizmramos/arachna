@@ -3,7 +3,7 @@ from math import ceil
 import os
 
 def touch(path):
-    with open(path, 'a'):
+    with open(path, 'w'):
         os.utime(path, None)
 
 DISK = "/Arachna/database/users.db"
