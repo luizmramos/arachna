@@ -1,31 +1,24 @@
 from flask import Flask
 from flask import render_template
+from dbmanager import get_all_by_score
 
 app = Flask(__name__)
 
+def convert(users_list):
+    return [
+        {
+            'rank': rank+1,
+            'username': user[0],
+            'problems': user[1],
+            'score': user[2]
+        }
+        for rank, user in enumerate(users_list)
+    ]
+
 @app.route("/")
 def index():
-    users = [
-        {
-            "rank": 1,
-            "username": 'vyrp',
-            "problems": 100,
-            "score": 40.30,
-        },
-        {
-            "rank": 2,
-            "username": 'harry',
-            "problems": 90,
-            "score": 35.35,
-        },
-        {
-            "rank": 3,
-            "username": 'h4x0r',
-            "problems": 85,
-            "score": 33.67,
-        },
-    ]
-    return render_template("index.html", users=users)
+    users = get_all_by_score()
+    return render_template("index.html", users=convert(users))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
