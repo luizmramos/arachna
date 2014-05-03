@@ -1,8 +1,14 @@
 import sqlite3
 from math import ceil
+import os
+
+def touch(path):
+    with open(path, 'a'):
+        os.utime(path, None)
 
 DISK = "/Arachna/database/users.db"
 MEMORY = ":memory:"
+done = "Arachna/database/DONE"
 db = None
 
 def create(users_dict):
@@ -18,6 +24,7 @@ def create(users_dict):
 
     conn.commit()
     conn.close()
+    touch(done)
 
 def copy():
     conn = sqlite3.connect(DISK)
@@ -33,18 +40,27 @@ def copy():
     global db
     db = c 
 
+def execute(query, param=None):
+    if os.path.isfile(done):
+        os.remove(done)
+        db.close()
+        copy()
+    if param:
+        return db.execute(query, param)
+    return db.execute(query)
+
 def get_user(user):
-    db.execute("SELECT * FROM users WHERE username = ?", (user,))
+    execute("SELECT * FROM users WHERE username = ?", (user,))
     result = db.fetchone()
     return result
     
 def get_amount():
-    db.execute("SELECT COUNT(*) FROM users")
+    execute("SELECT COUNT(*) FROM users")
     result = int(db.fetchone()[0])
     return int(ceil(result/1000.0))
 
 def get_all_by(type, page):
-    result = list(db.execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
+    result = list(execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
     return result
 
 def get_all_by_problems(page):
