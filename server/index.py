@@ -1,8 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from dbmanager import get_all_by_score
-from dbmanager import get_all_by_problems
+from dbmanager import get_all_by
 from dbmanager import get_amount
 from dbmanager import get_all
 from dbmanager import copy
@@ -22,15 +21,17 @@ def convert(users_list, page):
 
 @app.route("/")
 @app.route("/index")
-def index(page=1):
+def index():
     return render_template("index.html", url="index")
 
-@app.route("/search", methods=["POST"])
-def search():
+@app.route("/search/<type>", methods=["POST"])
+def search(type):
+    if not (type == "score" or type == "problems"):
+        type = "score"
     try:
         user = request.form["user"]
-        users = convert(get_all(), 1)
-        amount = len(users)
+        users = convert(get_all(type), 1)
+        amount = get_amount()
         filtered = filter(lambda u: u["username"] == user, users)
         
         if filtered:
@@ -40,8 +41,8 @@ def search():
             rank = -1
             page = 1
 
-        users_list = get_all_by_score(page)
-        template = render_template("search.html", users=convert(users_list, page), amount=amount, page=page, rank=rank, url="search")
+        users_list = get_all_by(type, page)
+        template = render_template("search.html", users=convert(users_list, page), amount=amount, page=page, rank=rank, url=type)
     except Exception as e:
         print e
     return template
@@ -51,7 +52,8 @@ def search():
 def score(page=1):
     try:
         amount = get_amount()
-        users_list = get_all_by_score(page if page <= amount else amount)
+        page = page if page <= amount else amount
+        users_list = get_all_by("score", page)
         template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page, url="score")
     except Exception as e:
         print e
@@ -62,7 +64,8 @@ def score(page=1):
 def problems(page=1):
     try:
         amount = get_amount()
-        users_list = get_all_by_problems(page if page <= amount else amount)
+        page = page if page <= amount else amount
+        users_list = get_all_by("problems", page)
         template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page, url="problems")
     except Exception as e:
         print e

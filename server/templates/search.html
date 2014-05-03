@@ -48,6 +48,30 @@
           </tbody>
         </table>
       </div>
+
+      <div class="pagination pagination-centered">
+        <ul>
+          {% if page == 1 %}
+          <li class="disabled"><a>&laquo;</a></li>
+          {% else %}
+          <li><a href="/{{ url }}/{{ page-1 }}">&laquo;</a></li>
+          {% endif %}
+
+          {% for idx in range(amount) %}
+            {% if idx+1 == page %}
+          <li class="active"><a>{{ idx+1 }}</a></li>
+            {% else %}
+          <li><a href="/{{ url }}/{{ idx+1 }}">{{ idx+1 }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page == amount %}
+          <li class="disabled"><a>&raquo;</a></li>
+          {% else %}
+          <li><a href="/{{ url }}/{{ page+1 }}">&raquo;</a></li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
