@@ -1,8 +1,12 @@
 import sqlite3
 from math import ceil
 
+DISK = "/Arachna/database/users.db"
+MEMORY = ":memory:"
+db = None
+
 def create(users_dict):
-    conn = sqlite3.connect("/Arachna/database/users.db")
+    conn = sqlite3.connect(DISK)
     c = conn.cursor()
 
     c.execute("DROP TABLE IF EXISTS users")
@@ -15,33 +19,32 @@ def create(users_dict):
     conn.commit()
     conn.close()
 
-def get_user(user):
-    conn = sqlite3.connect("/Arachna/database/users.db")
+def copy():
+    conn = sqlite3.connect(DISK)
     c = conn.cursor()
-    
-    c.execute("SELECT * FROM users WHERE username = ?", (user,))
-    result = c.fetchone()
+    result = list(c.execute("SELECT * FROM users"))
     conn.close()
 
+    conn = sqlite3.connect(MEMORY)
+    c = conn.cursor()
+    c.execute("DROP TABLE IF EXISTS users")
+    c.execute("CREATE TABLE users (username VARCHAR(50), problems INTEGER, score REAL)")
+    c.executemany("INSERT INTO users VALUES (?, ?, ?)", result)
+    global db
+    db = c 
+
+def get_user(user):
+    db.execute("SELECT * FROM users WHERE username = ?", (user,))
+    result = db.fetchone()
     return result
     
 def get_amount():
-    conn = sqlite3.connect("/Arachna/database/users.db")
-    c = conn.cursor()
-    
-    c.execute("SELECT COUNT(*) FROM users")
-    result = int(c.fetchone()[0])
-    conn.close()
-
+    db.execute("SELECT COUNT(*) FROM users")
+    result = int(db.fetchone()[0])
     return int(ceil(result/1000.0))
 
 def get_all_by(type, page):
-    conn = sqlite3.connect("/Arachna/database/users.db")
-    c = conn.cursor()
-    
-    result = list(c.execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
-    conn.close()
-
+    result = list(db.execute("SELECT * FROM users ORDER BY " + type + " DESC LIMIT 1000 OFFSET ? ", (1000 * (page-1),)))
     return result
 
 def get_all_by_problems(page):

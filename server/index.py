@@ -3,6 +3,7 @@ from flask import render_template
 from dbmanager import get_all_by_score
 from dbmanager import get_all_by_problems
 from dbmanager import get_amount
+from dbmanager import copy
 
 app = Flask(__name__)
 
@@ -51,5 +52,6 @@ def problems(page=1):
     return template
 
 if __name__ == "__main__":
+    copy()
     app.run(host="0.0.0.0")
 
