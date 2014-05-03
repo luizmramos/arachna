@@ -30,12 +30,11 @@ def process_problem(problem_name):
 		print page,
 		page += 1
 		start += USER_PER_PROBLEM_PAGE
-	print	
+	print "/" + problem_name
 	return (users, points)
 
 
 def process_problem_users(content, users):
-	#print content
 	users_regexp = re.compile(r'<a href="/users/(\w+)/" title="\w+">[^<]*</a>')
 	nusers = 0
 	for match in users_regexp.finditer(content):
@@ -45,14 +44,3 @@ def process_problem_users(content, users):
 			continue;
 		users.add(user)
 	return nusers
-
-user_points = {}
-for p in ['HONESTID', 'ET', 'CUBO', 'LISP', 'ENGENHAR']:
-	users, points = process_problem(p)
-	for user in users:
-		if not user in user_points:
-			user_points[user] = 0
-		user_points[user] += points
-
-print user_points
-#print user_points

@@ -3,6 +3,7 @@ import re
 import multiprocessing.pool
 from Queue import Queue
 from threading import Thread
+from crawl_problem import process_problem
 import thread
 
 class Worker(Thread):
@@ -49,9 +50,15 @@ def hasFinished(line):
 	return len(finished_regex.findall(line)) != 0
 
 
+user_points = {}
+
 def crawl_problem(problem, lock):
 	with lock:
-		print problem
+		users, points = process_problem(problem)
+		for user in users:
+			if not user in user_points:
+				user_points[user] = 0
+			user_points[user] += points
 
 def crawl_all_problems():
 	pool = ThreadPool(10)
@@ -66,6 +73,8 @@ def crawl_all_problems():
 			for problem in problems:
 				pool.add_task(crawl_problem, problem, lock)
 			offset = offset + len(problems)
+			pool.wait_completion()
+			print user_points
 			if hasFinished(html):
 				break
 
