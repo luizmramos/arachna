@@ -5,6 +5,7 @@ from Queue import Queue
 from threading import Thread
 from crawl_problem import process_problem
 import thread
+from server import dbmanager
 
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""
@@ -64,7 +65,7 @@ def crawl_problem(problem, lock):
 
 def crawl_all_problems():
 	pool = ThreadPool(16)
-	problem_sets = ["contest_noturno", "mineira", "obi", "regionais", "seletivas", "seletiva_ioi", 	"sulamericana"]	
+	problem_sets = ["contest_noturno"] #, "mineira", "obi", "regionais", "seletivas", "seletiva_ioi", 	"sulamericana"]	
 	lock = thread.allocate_lock()
 	for problem_set in problem_sets:
 		offset = 0	
@@ -83,4 +84,5 @@ def crawl_all_problems():
 
 if __name__ == "__main__":
 	crawl_all_problems()
+	dbmanager.create(user_points)
 	
