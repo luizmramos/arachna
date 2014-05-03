@@ -6,11 +6,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/index">Arachna</a>
+          <a {% if url == "index" %}class="brand active"{% else %}class="brand"{% endif %} href="/index">Arachna</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="/score">By Score</a></li>
-              <li><a href="/problems">By Problems</a></li>
+              <li {% if url == "score" %}class="active"{% endif %}><a href="/score">By Score</a></li>
+              <li {% if url == "problems" %}class="active"{% endif %}><a href="/problems">By Problems</a></li>
             </ul>
             <ul class="nav pull-right">
               <li>

@@ -23,7 +23,7 @@ def convert(users_list, page):
 @app.route("/")
 @app.route("/index")
 def index(page=1):
-    return render_template("index.html")
+    return render_template("index.html", url="index")
 
 @app.route("/search", methods=["POST"])
 def search():
@@ -41,7 +41,7 @@ def search():
             page = 1
 
         users_list = get_all_by_score(page)
-        template = render_template("search.html", users=convert(users_list, page), amount=amount, page=page, rank=rank)
+        template = render_template("search.html", users=convert(users_list, page), amount=amount, page=page, rank=rank, url="search")
     except Exception as e:
         print e
     return template
@@ -52,7 +52,7 @@ def score(page=1):
     try:
         amount = get_amount()
         users_list = get_all_by_score(page if page <= amount else amount)
-        template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page)
+        template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page, url="score")
     except Exception as e:
         print e
     return template
@@ -63,7 +63,7 @@ def problems(page=1):
     try:
         amount = get_amount()
         users_list = get_all_by_problems(page if page <= amount else amount)
-        template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page)
+        template = render_template("rank.html", users=convert(users_list, page), amount=amount, page=page, url="problems")
     except Exception as e:
         print e
     return template

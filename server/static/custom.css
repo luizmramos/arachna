@@ -34,3 +34,7 @@ body.arachna {
   color: rgb(204, 204, 204);
 }
 
+.arachna a.brand.active {
+  color: white;
+  background-color: #151515;
+}
