@@ -1,6 +1,9 @@
 import sqlite3
 from math import ceil
 import os
+import thread
+
+lock = thread.allocate_lock()
 
 def touch(path):
     with open(path, 'w'):
@@ -8,7 +11,7 @@ def touch(path):
 
 DISK = "/Arachna/database/users.db"
 MEMORY = ":memory:"
-done = "Arachna/database/DONE"
+done = "/Arachna/database/DONE"
 db = None
 
 def create(users_dict):
@@ -41,10 +44,11 @@ def copy():
     db = c 
 
 def execute(query, param=None):
-    if os.path.isfile(done):
-        os.remove(done)
-        db.close()
-        copy()
+    with lock:
+        if os.path.isfile(done):
+            os.remove(done)
+            db.close()
+            copy()
     if param:
         return db.execute(query, param)
     return db.execute(query)
