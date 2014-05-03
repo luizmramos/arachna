@@ -65,7 +65,7 @@ def crawl_problem(problem, lock):
 
 def crawl_all_problems():
 	pool = ThreadPool(16)
-	problem_sets = ["contest_noturno"] #, "mineira", "obi", "regionais", "seletivas", "seletiva_ioi", 	"sulamericana"]	
+	problem_sets = ["contest_noturno", "mineira", "obi", "regionais", "seletivas", "seletiva_ioi", 	"sulamericana"]	
 	lock = thread.allocate_lock()
 	for problem_set in problem_sets:
 		offset = 0	
