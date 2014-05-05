@@ -1,5 +1,5 @@
-import urllib2;
-import re;
+import re
+import urllib2
 
 USER_PER_PROBLEM_PAGE = 20
 PROBLEM_PAGE_PREFIX = "http://br.spoj.com/ranks/"
@@ -10,9 +10,9 @@ user_points = {}
 
 
 def process_problem(problem_name):
-	response = urllib2.urlopen(PROBLEM_PAGE_PREFIX + problem_name).read();
+	response = urllib2.urlopen(PROBLEM_PAGE_PREFIX + problem_name).read()
 	accepteds_regexp = re.compile(r'<tr class="lightrow">\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>(\d+)</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+<td>\d+</td>\s+</tr>')
- 	accepteds = 0;
+ 	accepteds = 0
 	for match in accepteds_regexp.finditer(response):
 		accepteds = int(match.group(1))
 		break
@@ -42,6 +42,6 @@ def process_problem_users(content, users):
 		user = match.group(1)
 		nusers += 1
 		if user in users:
-			continue;
+			continue
 		users.add(user)
 	return nusers

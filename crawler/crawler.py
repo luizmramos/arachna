@@ -1,11 +1,11 @@
-import urllib2
-import re
 import multiprocessing.pool
+import re
+import sys
+import thread
+import urllib2
+from crawl_problem import process_problem
 from Queue import Queue
 from threading import Thread
-from crawl_problem import process_problem
-import thread
-import sys
 
 sys.path.append("/Arachna/server")
 import dbmanager

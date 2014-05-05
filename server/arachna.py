@@ -1,15 +1,10 @@
 #!/usr/bin/python
 
-from flask import Flask
-from flask import render_template
-from flask import request
-from dbmanager import get_all_by
-from dbmanager import get_amount
-from dbmanager import get_all
-from dbmanager import copy
-import sys
-import signal
 import logging
+import signal
+import sys
+from dbmanager import copy, get_all, get_all_by, get_amount
+from flask import Flask, render_template, request
 from logging.handlers import TimedRotatingFileHandler
 
 app = Flask(__name__)

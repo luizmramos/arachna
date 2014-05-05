@@ -1,7 +1,7 @@
-import sqlite3
-from math import ceil
 import os
+import sqlite3
 import thread
+from math import ceil
 
 lock = thread.allocate_lock()
 
