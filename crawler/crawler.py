@@ -5,7 +5,10 @@ from Queue import Queue
 from threading import Thread
 from crawl_problem import process_problem
 import thread
-from server import dbmanager
+import sys
+
+sys.path.append("/Arachna/server")
+import dbmanager
 
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""

@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -5,8 +7,19 @@ from dbmanager import get_all_by
 from dbmanager import get_amount
 from dbmanager import get_all
 from dbmanager import copy
+import sys
+import signal
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
 app = Flask(__name__)
+handler = TimedRotatingFileHandler("/Arachna/logs/server/log", when="midnight", backupCount=7)
+logger = logging.getLogger('werkzeug')
+
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+app.logger.setLevel(logging.INFO)
+app.logger.addHandler(handler)
 
 def convert(users_list, page):
     return [
@@ -75,7 +88,14 @@ def problems(page=1):
 def page_not_found(error):
     return render_template("404.html"), 404
 
+def signal_handler(signal, frame):
+    logger.warn("=== Process stopped (%d) ===" % signal)
+    sys.exit(0)
+
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
     copy()
     app.run(host="0.0.0.0", port=80)
 
