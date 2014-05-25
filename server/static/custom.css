@@ -38,3 +38,8 @@ body.arachna {
   color: white;
   background-color: #151515;
 }
+
+.arachna a.username {
+  color: rgb(198, 198, 198);
+  font-weight: bold;
+}

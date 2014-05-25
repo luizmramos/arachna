@@ -30,7 +30,7 @@
             {% for user in users %}
             <tr>
               <td>{{ user.rank }}</td>
-              <td>{{ user.username }}</td>
+              <td><a class="username" href="http://br.spoj.com/users/{{ user.username }}/">{{ user.username }}</a></td>
               <td>{{ user.problems }}</td>
               <td>{{ '%0.3f' % user.score }}</td>
             </tr>

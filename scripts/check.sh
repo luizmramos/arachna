@@ -1,2 +1,2 @@
 #!/bin/bash
-[ "`service arachna status | grep -c not`" = 1 ] && sudo service arachna start && echo "`date +%Y%m%d%H%M`" >> /Arachna/logs/server/down.log
+wget --spider -T 5 -t 2 "http://localhost:80/" &> /dev/null || (sudo service arachna restart && date "+%Y-%m-%d %H:%M" >> /Arachna/logs/server/down.log)
